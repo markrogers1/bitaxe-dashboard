@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Bitaxe Live</title>
+  <style>
+    body {
+      background-color: black;
+      color: lime;
+      font-family: monospace;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .banner {
+      background: red;
+      color: white;
+      padding: 10px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .stats {
+      white-space: pre-line;
+      margin-top: 20px;
+      font-size: 20px;
+    }
+    img {
+      margin-top: 30px;
+      max-width: 180px;
+    }
+    .donate {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    .donate code {
+      background: #111;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+  </style>
+  <script>
+    async function fetchStats() {
+      try {
+        const res = await fetch('https://yourproject.firebaseio.com/bitaxe.json');
+        const data = await res.json();
+        document.getElementById('stats').innerText = `
+🔥 Best Share: ${data.bestShare}
+⚡ Hashrate: ${data.hashrate}
+⏱️ Uptime: ${data.uptime}
+🌡️ Temp: ${data.temperature}
+        `;
+      } catch (e) {
+        document.getElementById('stats').innerText = 'Error fetching data...';
+      }
+    }
+    setInterval(fetchStats, 30000); // every 30s
+    window.onload = fetchStats;
+  </script>
+</head>
+<body>
+  <div class="banner">🔴 BITAXE LIVE</div>
+  <img src="hashi.png" alt="Hashi the mascot">
+  <div id="stats" class="stats">Loading stats...</div>
+  <div class="donate">
+    Donate BTC: <br>
+    <code>bc1yourwalletxyz</code>
+  </div>
+</body>
+</html>
