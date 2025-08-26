@@ -94,26 +94,28 @@ async function fetchBtcPrice() {
 }
 
 async function fetchBitaxeStats() {
-    if (!btcAddress) return;
-    const res = await fetchWithRetry(`https://ausolo.ckpool.org/users/${btcAddress}`);
-    if (!res) {
-        document.getElementById('hr1m').textContent = 'Unavailable';
-        return;
-    }
-    const text = await res.text();
+    const spinner = document.getElementById('stats-spinner');
+    spinner.classList.remove('hidden');
     try {
-        const data = JSON.parse(`{${text}}`);
-        document.getElementById('hr1m').textContent = data.hashrate1m || 'N/A';
-        document.getElementById('hr5m').textContent = data.hashrate5m || 'N/A';
-        document.getElementById('hr1h').textContent = data.hashrate1hr || 'N/A';
-        document.getElementById('bestshare').textContent = data.bestshare || 'N/A';
-        document.getElementById('lastshare').textContent = data.lastshare ? new Date(data.lastshare * 1000).toLocaleString() : 'N/A';
-    } catch (err) {
-        console.error('Parsing error:', err);
-        document.getElementById('hr1m').textContent = 'Parse error';
+        const response = await fetch(`http://ausolo.ckpool.org/users/${btcAddress}`);
+        const data = await response.text();
+        const parsedData = JSON.parse(data.replace(/=>/g, ':'));
+        document.getElementById('hr1m').textContent = formatHashrate(parsedData.hashrate1m);
+        document.getElementById('hr5m').textContent = formatHashrate(parsedData.hashrate5m);
+        document.getElementById('hr1h').textContent = formatHashrate(parsedData.hashrate1hr);
+        document.getElementById('bestshare').textContent = parsedData.bestshare.toLocaleString();
+        document.getElementById('lastshare').textContent = new Date(parsedData.lastshare * 1000).toLocaleString();
+    } catch (error) {
+        console.error('Error fetching Bitaxe stats:', error);
+        document.getElementById('hr1m').textContent = 'Unavailable';
+        document.getElementById('hr5m').textContent = 'Unavailable';
+        document.getElementById('hr1h').textContent = 'Unavailable';
+        document.getElementById('bestshare').textContent = 'Unavailable';
+        document.getElementById('lastshare').textContent = 'Unavailable';
+    } finally {
+        spinner.classList.add('hidden');
     }
 }
-
 async function fetchLotteryData() {
     const blocksRes = await fetchWithRetry('https://mempool.space/api/blocks');
     if (blocksRes) {
