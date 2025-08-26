@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bitaxe Gamma Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="dashboard">
-        <section class="price-ticker">
-            <h1>Bitcoin Price</h1>
-            <div id="btc-price" class="price">Loading...</div>
-            <canvas id="priceChart" width="400" height="200"></canvas>
+<body class="bg-gradient-to-br from-gray-900 to-black text-white font-orbitron">
+    <div class="dashboard grid grid-cols-1 gap-4 p-4 max-w-full mx-auto h-screen">
+        <section class="price-ticker bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-neon-green relative">
+            <div id="price-spinner" class="spinner hidden"></div>
+            <h1 class="text-2xl text-center text-green-400">Bitcoin Price</h1>
+            <div id="btc-price" class="price text-5xl text-center font-bold my-4">Loading...</div>
+            <canvas id="priceChart" class="mx-auto" width="400" height="120"></canvas>
         </section>
         
-        <section class="bitaxe-stats">
-            <h1>Bitaxe Gamma Stats</h1>
-            <input type="text" id="btc-address" placeholder="Enter your BTC address" />
-            <button onclick="saveAddress()">Save</button>
-            <div id="stats">
+        <section class="bitaxe-stats bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-neon-blue relative">
+            <div id="stats-spinner" class="spinner hidden"></div>
+            <h1 class="text-xl text-center text-blue-400">Bitaxe Gamma Stats</h1>
+            <input id="btc-address" type="text" placeholder="Enter your BTC address" class="block mx-auto my-2 p-2 bg-gray-700 rounded text-white w-3/4">
+            <button onclick="saveAddress()" class="block mx-auto bg-green-500 hover:bg-green-600 text-black font-bold py-2 px-4 rounded">Save</button>
+            <div id="stats" class="text-sm">
                 <p>Hashrate (1m): <span id="hr1m">Loading...</span></p>
                 <p>Hashrate (5m): <span id="hr5m">Loading...</span></p>
                 <p>Hashrate (1h): <span id="hr1h">Loading...</span></p>
@@ -28,15 +32,17 @@
             </div>
         </section>
         
-        <section class="lottery">
-            <h1>Blockchain Lottery</h1>
-            <div class="timer">
+        <section class="lottery bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 shadow-neon-yellow relative">
+            <div id="lottery-spinner" class="spinner hidden"></div>
+            <h1 class="text-xl text-center text-yellow-400">Blockchain Lottery</h1>
+            <div class="timer text-2xl text-center text-yellow-300 my-2">
                 Time Since Last Block: <span id="time-elapsed">Loading...</span>
             </div>
-            <div>Estimated Next Block: <span id="next-estimate">~10min average</span></div>
-            <div>Last Block Height: <span id="last-height">Loading...</span></div>
-            <div>Mempool Size: <span id="mempool-size">Loading...</span> txs</div>
-            <div>High-Priority Fee: <span id="high-fee">Loading...</span> sat/vB</div>
+            <div class="text-sm">Estimated Next Block: <span id="next-estimate">~10min average</span></div>
+            <div class="text-sm">Last Block Height: <span id="last-height">Loading...</span></div>
+            <div class="text-sm">Block Reward: <span id="block-reward">Loading...</span></div>
+            <div class="text-sm">Mempool Size: <span id="mempool-size">Loading...</span> txs</div>
+            <div class="text-sm">High-Priority Fee: <span id="high-fee">Loading...</span> sat/vB</div>
         </section>
     </div>
     <script src="script.js"></script>
