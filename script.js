@@ -14,12 +14,17 @@ priceChart = new Chart(priceCtx, {
             data: priceHistory.map(p => p.price),
             borderColor: '#00ff00',
             backgroundColor: 'rgba(0, 255, 0, 0.2)',
-            fill: true
+            fill: true,
+            tension: 0.3
         }]
     },
     options: {
         scales: {
-            y: { beginAtZero: false }
+            y: { beginAtZero: false, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+            x: { grid: { display: false } }
+        },
+        plugins: {
+            legend: { display: false }
         }
     }
 });
@@ -59,7 +64,6 @@ async function fetchWithRetry(url, retries = 3, delay = 1000) {
     }
 }
 
-// Fetch BTC Price
 async function fetchBtcPrice() {
     const res = await fetchWithRetry('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
     if (!res) {
@@ -80,7 +84,6 @@ async function fetchBtcPrice() {
     }
     prevPrice = currentPrice;
 
-    // Update chart
     const time = new Date().toLocaleTimeString();
     priceHistory.push({ time, price: currentPrice });
     if (priceHistory.length > 10) priceHistory.shift();
@@ -90,18 +93,16 @@ async function fetchBtcPrice() {
     priceChart.update();
 }
 
-// Fetch Bitaxe Stats
 async function fetchBitaxeStats() {
     if (!btcAddress) return;
     const res = await fetchWithRetry(`https://solo.ckpool.org/users/${btcAddress}`);
     if (!res) {
         document.getElementById('hr1m').textContent = 'Unavailable';
-        // Handle other fields similarly
         return;
     }
     const text = await res.text();
     try {
-        const data = JSON.parse(`{${text}}`); // Adjust if needed based on actual format
+        const data = JSON.parse(`{${text}}`);
         document.getElementById('hr1m').textContent = data.hashrate1m || 'N/A';
         document.getElementById('hr5m').textContent = data.hashrate5m || 'N/A';
         document.getElementById('hr1h').textContent = data.hashrate1hr || 'N/A';
@@ -110,11 +111,9 @@ async function fetchBitaxeStats() {
     } catch (err) {
         console.error('Parsing error:', err);
         document.getElementById('hr1m').textContent = 'Parse error';
-        // Handle others
     }
 }
 
-// Fetch Lottery Data
 async function fetchLotteryData() {
     const blocksRes = await fetchWithRetry('https://mempool.space/api/blocks');
     if (blocksRes) {
@@ -122,7 +121,7 @@ async function fetchLotteryData() {
         const lastBlock = blocks[0];
         lastBlockTime = lastBlock.timestamp * 1000;
         document.getElementById('last-height').textContent = lastBlock.height;
-        updateTimer(); // Initial update
+        updateTimer();
     }
 
     const mempoolRes = await fetchWithRetry('https://mempool.space/api/mempool');
@@ -154,11 +153,10 @@ function updateTimer() {
     }
 }
 
-// Initial fetches and intervals
 fetchBtcPrice();
 fetchLotteryData();
 fetchBitaxeStats();
-setInterval(fetchBtcPrice, 30000); // 30s
-setInterval(fetchBitaxeStats, 60000); // 1min
-setInterval(fetchLotteryData, 30000); // 30s
-setInterval(updateTimer, 1000); // Every second for smooth timer
+setInterval(fetchBtcPrice, 30000);
+setInterval(fetchBitaxeStats, 60000);
+setInterval(fetchLotteryData, 30000);
+setInterval(updateTimer, 1000);
