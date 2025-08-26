@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitaxe Gamma Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <section class="price-ticker">
+            <h1>Bitcoin Price</h1>
+            <div id="btc-price" class="price">Loading...</div>
+            <canvas id="priceChart" width="400" height="200"></canvas>
+        </section>
+        
+        <section class="bitaxe-stats">
+            <h1>Bitaxe Gamma Stats</h1>
+            <input type="text" id="btc-address" placeholder="Enter your BTC address" />
+            <button onclick="saveAddress()">Save</button>
+            <div id="stats">
+                <p>Hashrate (1m): <span id="hr1m">Loading...</span></p>
+                <p>Hashrate (5m): <span id="hr5m">Loading...</span></p>
+                <p>Hashrate (1h): <span id="hr1h">Loading...</span></p>
+                <p>Best Share: <span id="bestshare">Loading...</span></p>
+                <p>Last Share: <span id="lastshare">Loading...</span></p>
+            </div>
+        </section>
+        
+        <section class="lottery">
+            <h1>Blockchain Lottery</h1>
+            <div class="timer">
+                Time Since Last Block: <span id="time-elapsed">Loading...</span>
+            </div>
+            <div>Estimated Next Block: <span id="next-estimate">~10min average</span></div>
+            <div>Last Block Height: <span id="last-height">Loading...</span></div>
+            <div>Mempool Size: <span id="mempool-size">Loading...</span> txs</div>
+            <div>High-Priority Fee: <span id="high-fee">Loading...</span> sat/vB</div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
