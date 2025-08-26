@@ -95,7 +95,7 @@ async function fetchBtcPrice() {
 
 async function fetchBitaxeStats() {
     if (!btcAddress) return;
-    const res = await fetchWithRetry(`https://solo.ckpool.org/users/${btcAddress}`);
+    const res = await fetchWithRetry(`https://ausolo.ckpool.org/users/${btcAddress}`);
     if (!res) {
         document.getElementById('hr1m').textContent = 'Unavailable';
         return;
